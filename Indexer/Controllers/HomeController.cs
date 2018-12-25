@@ -17,6 +17,11 @@ namespace Indexer.Controllers
             return View(new KeyValuePair<string, List<FileItem>>(string.Empty, new List<FileItem>()));
         }
 
+        public ActionResult ListFiles()
+        {
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public ActionResult ListFiles(string filename)
         {
