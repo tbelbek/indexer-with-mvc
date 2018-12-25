@@ -1,5 +1,5 @@
 ﻿@using Indexer.Models;
-@model KeyValuePair<string,List<FileItem>>
+@model KeyValuePair<string, List<FileItem>>
 @{
     ViewBag.Title = "Arayınız efendim.";
 }
@@ -21,13 +21,13 @@
         </div>
         if (Model.Value.Count > 0)
         {
-        <div>
-            @foreach (FileItem item in Model.Value)
-            {
-                <a class="btn btn-primary btn-lg active" style="margin-top:5px;" href="/Home/GetFile?hash=@item.Hash" role="button">@item.Name</a>
-            }
-            <a class="btn btn-success btn-lg active" style="margin-top:5px;" href="/Home/GetAllAsZip?filename=@Model.Key" role="button">Tümünü ziple ve indir</a>
-        </div>
+            <div>
+                @foreach (FileItem item in Model.Value)
+                {
+                    <a class="btn btn-primary btn-lg active" style="margin-top:5px;" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
+                }
+                <a class="btn btn-success btn-lg active" style="margin-top:5px;" href="@Url.Action("GetAllAsZip","Home",new { filename = Model.Key})" role="button">Tümünü ziple ve indir</a>
+            </div>
         }
 
     }

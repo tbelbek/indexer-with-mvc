@@ -31,7 +31,6 @@ namespace Indexer.Controllers
             return list;
         }
 
-        [HttpGet]
         public FileResult GetFile(string hash)
         {
             FileItem file = LuceneEngine.Search("Hash", hash).First();
@@ -39,8 +38,7 @@ namespace Indexer.Controllers
             string fileName = Path.GetFileName(file.Path);
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
-
-        [HttpGet]
+         
         public FileStreamResult GetAllAsZip(string filename)
         {
             List<FileItem> list = LuceneSearcher(filename);
