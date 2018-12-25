@@ -37,10 +37,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/03/2011 14:16:38</publishTime>
     </File>
     <File Include="bin/Indexer.dll">
-      <publishTime>12/25/2018 09:28:37</publishTime>
+      <publishTime>12/25/2018 10:01:47</publishTime>
     </File>
     <File Include="bin/Indexer.pdb">
-      <publishTime>12/25/2018 09:28:37</publishTime>
+      <publishTime>12/25/2018 10:01:47</publishTime>
     </File>
     <File Include="bin/Lucene.Net.dll">
       <publishTime>10/26/2012 00:52:54</publishTime>
@@ -349,7 +349,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/24/2018 14:00:23</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>12/25/2018 09:10:58</publishTime>
+      <publishTime>12/25/2018 09:53:42</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>12/24/2018 14:00:23</publishTime>
@@ -364,7 +364,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/24/2018 14:00:23</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/25/2018 09:28:37</publishTime>
+      <publishTime>12/25/2018 10:01:22</publishTime>
     </File>
   </ItemGroup>
 </Project>

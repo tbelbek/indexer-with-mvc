@@ -22,11 +22,11 @@
         if (Model.Value.Count > 0)
         {
             <div>
+                <a class="btn btn-success btn-lg active" style="margin-top:5px;" href="@Url.Action("GetAllAsZip","Home",new { filename = Model.Key})" role="button">Tümünü ziple ve indir</a>
                 @foreach (FileItem item in Model.Value)
                 {
                     <a class="btn btn-primary btn-lg active" style="margin-top:5px;" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
                 }
-                <a class="btn btn-success btn-lg active" style="margin-top:5px;" href="@Url.Action("GetAllAsZip","Home",new { filename = Model.Key})" role="button">Tümünü ziple ve indir</a>
             </div>
         }
 
