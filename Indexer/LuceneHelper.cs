@@ -151,6 +151,18 @@ namespace Indexer
             AddToIndex(fileList);
             ClearBag(fileList);
         }
+
+        public static void DeleteOldFiles()
+        {
+            var path = $"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/";
+            System.IO.DirectoryInfo di = new DirectoryInfo(path);
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+        }
+
         public static void ClearBag<T>(ConcurrentBag<T> bag)
         {
             T someItem;

@@ -21,6 +21,7 @@ namespace Indexer
             
             GlobalConfiguration.Configuration.UseMemoryStorage();
             RecurringJob.AddOrUpdate(() => LuceneEngine.Indexer(), Cron.Hourly);
+            RecurringJob.AddOrUpdate(() => LuceneEngine.DeleteOldFiles(), Cron.Weekly);
         }
     }
 }
