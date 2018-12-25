@@ -2,6 +2,7 @@
 using Ionic.Zip;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -35,6 +36,12 @@ namespace Indexer.Controllers
         public void GetFile(string hash)
         {
             FileItem file = LuceneEngine.Search("Hash", hash).First();
+            GetFileByPath(file);
+
+        }
+
+        private void GetFileByPath(FileItem file)
+        {
             string fileName = Path.GetFileName(file.Path);
             long length = new System.IO.FileInfo(file.Path).Length;
             Response.Clear();
@@ -43,33 +50,38 @@ namespace Indexer.Controllers
             Response.AppendHeader("content-length", length.ToString());
             Response.TransmitFile(file.Path);
             Response.End();
-
         }
 
         public void GetAllAsZip(string filename)
         {
+            HttpContext.Server.ScriptTimeout = 600;
             List<FileItem> list = LuceneSearcher(filename);
-            var stream = new MemoryStream();
-            using (ZipFile zip = new ZipFile($"{DateTime.Now.ToString("ddMMyyyhhmmss.zip")}"))
+            var fileItem = new FileItem();
+
+            if (Directory.Exists($"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/"))
+            {
+                Directory.CreateDirectory($"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/");
+            }
+
+            fileItem.Name = $"{DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip";
+            fileItem.Path = $"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/{DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip";
+
+            using (ZipFile zip = new ZipFile())
             {
                 foreach (FileItem item in list)
                 {
                     zip.AddFile(item.Path, string.Empty);
                 }
 
-                zip.Save(stream);
+                zip.Save(fileItem.Path);
             }
 
-            stream.Seek(0, SeekOrigin.Begin);
+            GetFileByPath(fileItem);
 
-            Response.Clear();
-            Response.ContentType = "application/octet-stream";
-            Response.AddHeader("Content-Disposition", $"attachment; filename={DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip");
-            Response.AppendHeader("content-length", stream.Length.ToString());
-            Response.BinaryWrite(stream.ToArray());
-            Response.Flush();
-            Response.Close();
-            Response.End();
+            if (System.IO.File.Exists(fileItem.Path))
+            {
+                System.IO.File.Delete(fileItem.Path);
+            }
 
         }
     }
