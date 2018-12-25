@@ -1,15 +1,14 @@
-﻿@using Indexer.Models;
-@model KeyValuePair<string, List<FileItem>>
+﻿@model KeyValuePair<string, List<Indexer.Models.FileItem>>
 @{
     ViewBag.Title = "Arayınız efendim.";
 }
 
 <div class="s003">
-    @using (Html.BeginForm("ListFiles", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("ListFiles", "Home", FormMethod.Post, new {enctype = "multipart/form-data"}))
     {
         <div class="inner-form">
             <div class="input-field second-wrap">
-                <input type="text" name="filename" placeholder="Arama metnini giriniz." value="@Model.Key" />
+                <input type="text" name="filename" placeholder="Arama metnini giriniz." value="@Model.Key"/>
             </div>
             <div class="input-field third-wrap">
                 <button class="btn-search" type="submit">
@@ -22,22 +21,20 @@
         if (Model.Value.Count > 0)
         {
             <div>
-                <a class="btn btn-success btn-lg active" style="margin-top:5px;" href="@Url.Action("GetAllAsZip","Home",new { filename = Model.Key})" role="button">Tümünü ziple ve indir</a>
-                @foreach (FileItem item in Model.Value)
+                <a class="btn btn-success btn-lg active" style="margin-top: 5px;" href="@Url.Action("GetAllAsZip", "Home", new {filename = Model.Key})" role="button">Tümünü ziple ve indir</a>
+                @foreach (var item in Model.Value)
                 {
                     if (item.Name.Contains(".epub") || item.Name.Contains(".mobi"))
                     {
-                        <a class="btn btn-primary btn-lg active" style="margin-top:5px;" data-type="ebook" hash="@item.Hash" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
+                        <a class="btn btn-primary btn-lg active" style="margin-top: 5px;" data-type="ebook" hash="@item.Hash" href="@Url.Action("GetFile", "Home", new {hash = item.Hash})" role="button">@item.Name</a>
                     }
                     else
                     {
-                        <a class="btn btn-primary btn-lg active" style="margin-top:5px;" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
+                        <a class="btn btn-primary btn-lg active" style="margin-top: 5px;" href="@Url.Action("GetFile", "Home", new {hash = item.Hash})" role="button">@item.Name</a>
                     }
-
                 }
             </div>
         }
-
     }
 </div>
 
@@ -54,48 +51,49 @@
     //$("a").longclick(500, function (e) {
     //    alert();
     //});
-window.oncontextmenu = function(event) {
-     event.preventDefault();
-     event.stopPropagation();
-if ($(event.path).attr("data-type")=="ebook") {
-                alert("Kindle'a gönderiliyor");
-                $.post("@Url.Action("SendToKindle","Home")",
-                    { "hash":$(event.path).attr("hash") },
-                    function (data, status) {
-                        if (data == true) {
-                            alert("Gönderim Başarılı");
-                        } else {
-                            alert("Gönderim Başarısız");
-                        }
+    window.oncontextmenu = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if ($(event.path).attr("data-type") == "ebook") {
+            alert("Kindle'a gönderiliyor");
+            $.post("@Url.Action("SendToKindle", "Home")",
+                { "hash": $(event.path).attr("hash") },
+                function(data, status) {
+                    if (data == true) {
+                        alert("Gönderim Başarılı");
+                    } else {
+                        alert("Gönderim Başarısız");
+                    }
 
-                    });
-            }
-     return false;
+                });
+        }
+        return false;
 
-};
+    };
 
-    $("a").mouseup(function (e) {
+    $("a").mouseup(function(e) {
         clearTimeout(pressTimer);
         // Clear timeout
         return false;
-    }).mousedown(function (e) {
+    }).mousedown(function(e) {
         // Set timeout
-        pressTimer = window.setTimeout(function () {
-            if ($(e.currentTarget).attr("data-type")=="ebook") {
+        pressTimer = window.setTimeout(function() {
+            if ($(e.currentTarget).attr("data-type") == "ebook") {
                 alert("Kindle'a gönderiliyor");
-                $.post("@Url.Action("SendToKindle","Home")",
-                    { "hash": $(e.currentTarget).attr("hash") },
-                    function (data, status) {
-                        if (data == true) {
-                            alert("Gönderim Başarılı");
-                        } else {
-                            alert("Gönderim Başarısız");
-                        }
+                $.post("@Url.Action("SendToKindle", "Home")",
+                        { "hash": $(e.currentTarget).attr("hash") },
+                        function(data, status) {
+                            if (data == true) {
+                                alert("Gönderim Başarılı");
+                            } else {
+                                alert("Gönderim Başarısız");
+                            }
 
-                    });
-            }
+                        });
+                }
 
-        }, 1500);
+            },
+            1500);
         return false;
     });
 
