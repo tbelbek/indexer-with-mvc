@@ -20,6 +20,7 @@ namespace Indexer.Controllers
         public ActionResult ListFiles(string filename)
         {
             List<FileItem> list = LuceneSearcher(filename);
+            ViewBag.Value = filename;
             return View("Index", new KeyValuePair<string, List<FileItem>>(filename, list));
         }
 
@@ -35,12 +36,12 @@ namespace Indexer.Controllers
         {
             FileItem file = LuceneEngine.Search("Hash", hash).First();
             string fileName = Path.GetFileName(file.Path);
+            long length = new System.IO.FileInfo(file.Path).Length;
             Response.Clear();
             Response.ContentType = "application/octet-stream";
             Response.AppendHeader("Content-Disposition", "filename=" + fileName);
-
+            Response.AppendHeader("content-length", length.ToString());
             Response.TransmitFile(file.Path);
-
             Response.End();
 
         }
@@ -64,6 +65,7 @@ namespace Indexer.Controllers
             Response.Clear();
             Response.ContentType = "application/octet-stream";
             Response.AddHeader("Content-Disposition", $"attachment; filename={DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip");
+            Response.AppendHeader("content-length", stream.Length.ToString());
             Response.BinaryWrite(stream.ToArray());
             Response.Flush();
             Response.Close();
