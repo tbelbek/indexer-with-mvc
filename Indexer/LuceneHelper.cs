@@ -71,6 +71,8 @@ namespace Indexer
         {
             // Üzerinde arama yapmak istediğimiz field için bir query oluşturuyoruz.
             _QueryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, field, _Analyzer);
+            _QueryParser.DefaultOperator = QueryParser.Operator.AND;
+            _QueryParser.PhraseSlop = 0;
             _Query = _QueryParser.Parse(keyword);
 
             using (_IndexSearcher = new IndexSearcher(_Directory, true))
