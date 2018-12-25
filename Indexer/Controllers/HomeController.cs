@@ -27,8 +27,8 @@ namespace Indexer.Controllers
 
         private static List<FileItem> LuceneSearcher(string filename)
         {
-            var list = LuceneEngine.Search("Name", $"{filename}*");
-            list.AddRange(LuceneEngine.Search("Name", $"{filename}"));
+            var list = LuceneEngine.Search("Name", $"{filename.Trim()}*");
+            list.AddRange(LuceneEngine.Search("Name", $"{filename.Trim()}"));
             list = list.GroupBy(t => t.Hash).Select(x => x.First()).ToList();
             return list;
         }
@@ -37,7 +37,6 @@ namespace Indexer.Controllers
         {
             FileItem file = LuceneEngine.Search("Hash", hash).First();
             GetFileByPath(file);
-
         }
 
         private void GetFileByPath(FileItem file)
