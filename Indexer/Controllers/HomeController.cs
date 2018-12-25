@@ -31,15 +31,21 @@ namespace Indexer.Controllers
             return list;
         }
 
-        public FileResult GetFile(string hash)
+        public void GetFile(string hash)
         {
             FileItem file = LuceneEngine.Search("Hash", hash).First();
-            byte[] fileBytes = System.IO.File.ReadAllBytes(file.Path);
             string fileName = Path.GetFileName(file.Path);
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            Response.Clear();
+            Response.ContentType = "application/octet-stream";
+            Response.AppendHeader("Content-Disposition", "filename=" + fileName);
+
+            Response.TransmitFile(file.Path);
+
+            Response.End();
+
         }
 
-        public FileStreamResult GetAllAsZip(string filename)
+        public void GetAllAsZip(string filename)
         {
             List<FileItem> list = LuceneSearcher(filename);
             var stream = new MemoryStream();
@@ -54,7 +60,14 @@ namespace Indexer.Controllers
             }
 
             stream.Seek(0, SeekOrigin.Begin);
-            return File(stream, System.Net.Mime.MediaTypeNames.Application.Octet, $"{DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip");
+
+            Response.Clear();
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", $"attachment; filename={DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip");
+            Response.BinaryWrite(stream.ToArray());
+            Response.Flush();
+            Response.Close();
+            Response.End();
 
         }
     }
