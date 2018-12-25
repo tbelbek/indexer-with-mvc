@@ -16,17 +16,18 @@ namespace Indexer.Helper
                 return $"{directory}\\{outPath}";
             }
             string fileName = Path.GetFileName(filePath);
-
-            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd", $"/c {HttpContext.Current.Server.MapPath(@"~/App_Data/kindlegen.exe")} {filePath} -o {outPath}");
-
+            var args = $"/c {HttpContext.Current.Server.MapPath(@"~/App_Data/kindlegen.exe")} \"{filePath}\" -o \"{outPath}\"";
+            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd.exe");
+            procStartInfo.Arguments = args;
             procStartInfo.RedirectStandardOutput = true;
             procStartInfo.UseShellExecute = false;
-            procStartInfo.CreateNoWindow = true;
+            //procStartInfo.CreateNoWindow = true;
 
             // wrap IDisposable into using (in order to release hProcess) 
             using (Process process = new Process())
             {
                 process.StartInfo = procStartInfo;
+                process.StartInfo.Verb = "runas";
                 process.Start();
 
                 // Add this: wait until process does its work

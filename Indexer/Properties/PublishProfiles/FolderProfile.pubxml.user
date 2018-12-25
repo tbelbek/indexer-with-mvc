@@ -9,6 +9,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <_PublishTargetUrl>C:\publish\Indexer\25-12-2018</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
+    <File Include="App_Data/kindlegen.exe">
+      <publishTime>10/29/2014 11:18:54</publishTime>
+    </File>
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
@@ -37,10 +40,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/03/2011 14:16:38</publishTime>
     </File>
     <File Include="bin/Indexer.dll">
-      <publishTime>12/25/2018 13:27:53</publishTime>
+      <publishTime>12/25/2018 17:34:28</publishTime>
     </File>
     <File Include="bin/Indexer.pdb">
-      <publishTime>12/25/2018 13:27:53</publishTime>
+      <publishTime>12/25/2018 17:34:28</publishTime>
     </File>
     <File Include="bin/Lucene.Net.dll">
       <publishTime>10/26/2012 00:52:54</publishTime>
@@ -339,6 +342,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Scripts/js/main.js">
       <publishTime>12/24/2018 17:51:32</publishTime>
     </File>
+    <File Include="Scripts/long-press.min.js">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
     <File Include="Scripts/modernizr-2.8.3.js">
       <publishTime>12/24/2018 14:00:27</publishTime>
     </File>
@@ -349,13 +355,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/24/2018 14:00:23</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>12/25/2018 12:58:53</publishTime>
+      <publishTime>12/25/2018 16:15:04</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>12/24/2018 14:00:23</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/25/2018 10:25:12</publishTime>
+      <publishTime>12/25/2018 14:43:09</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>12/24/2018 14:00:23</publishTime>

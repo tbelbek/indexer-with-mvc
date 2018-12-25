@@ -54,6 +54,25 @@
     //$("a").longclick(500, function (e) {
     //    alert();
     //});
+window.oncontextmenu = function(event) {
+     event.preventDefault();
+     event.stopPropagation();
+if ($(event.path).attr("data-type")=="ebook") {
+                alert("Kindle'a gönderiliyor");
+                $.post("@Url.Action("SendToKindle","Home")",
+                    { "hash":$(event.path).attr("hash") },
+                    function (data, status) {
+                        if (data == true) {
+                            alert("Gönderim Başarılı");
+                        } else {
+                            alert("Gönderim Başarısız");
+                        }
+
+                    });
+            }
+     return false;
+
+};
 
     $("a").mouseup(function (e) {
         clearTimeout(pressTimer);
@@ -63,19 +82,20 @@
         // Set timeout
         pressTimer = window.setTimeout(function () {
             if ($(e.currentTarget).attr("data-type")=="ebook") {
+                alert("Kindle'a gönderiliyor");
                 $.post("@Url.Action("SendToKindle","Home")",
                     { "hash": $(e.currentTarget).attr("hash") },
-                    function (data, status) { 
+                    function (data, status) {
                         if (data == true) {
                             alert("Gönderim Başarılı");
                         } else {
                             alert("Gönderim Başarısız");
                         }
-                        
+
                     });
             }
 
-        }, 3000);
+        }, 1500);
         return false;
     });
 
