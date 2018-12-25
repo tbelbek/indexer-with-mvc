@@ -1,5 +1,7 @@
-﻿using Indexer.Models;
+﻿using Indexer.Helper;
+using Indexer.Models;
 using Ionic.Zip;
+using SendIndexerToKindle.Helper;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -30,6 +32,12 @@ namespace Indexer.Controllers
             return View("Index", new KeyValuePair<string, List<FileItem>>(filename, list));
         }
 
+        [HttpPost]
+        public JsonResult SendToKindle(string hash)
+        {
+            return Json(SendToKindleHelper(hash), JsonRequestBehavior.AllowGet);
+        }
+
         private static List<FileItem> LuceneSearcher(string filename)
         {
             var list = LuceneEngine.Search("Name", $"{filename.Trim()}*");
@@ -54,6 +62,23 @@ namespace Indexer.Controllers
             Response.AppendHeader("content-length", length.ToString());
             Response.TransmitFile(file.Path);
             Response.End();
+        }
+
+        public bool SendToKindleHelper(string hash)
+        {
+            try
+            {
+                var smtphelper = new SmtpService();
+                FileItem file = LuceneEngine.Search("Hash", hash).First();
+                var mobiPath = ConvertToKindleHelper.ConvertToMobi(file.Path);
+                smtphelper.SendMail(file.Name, file.Name, "destructer9@kindle.com", mobiPath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
         public void GetAllAsZip(string filename)

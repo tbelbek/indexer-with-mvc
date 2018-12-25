@@ -25,18 +25,59 @@
                 <a class="btn btn-success btn-lg active" style="margin-top:5px;" href="@Url.Action("GetAllAsZip","Home",new { filename = Model.Key})" role="button">Tümünü ziple ve indir</a>
                 @foreach (FileItem item in Model.Value)
                 {
-                    <a class="btn btn-primary btn-lg active" style="margin-top:5px;" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
+                    if (item.Name.Contains(".epub") || item.Name.Contains(".mobi"))
+                    {
+                        <a class="btn btn-primary btn-lg active" style="margin-top:5px;" data-type="ebook" hash="@item.Hash" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary btn-lg active" style="margin-top:5px;" href="@Url.Action("GetFile","Home",new { hash = item.Hash})" role="button">@item.Name</a>
+                    }
+
                 }
             </div>
         }
 
     }
 </div>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script src="~/Scripts/js/extention/choices.js"></script>
+<script src="http://rawgit.com/pisi/Longclick/master/jquery.longclick-min.js"></script>
 <script>
     const choices = new Choices('[data-trigger]',
         {
             searchEnabled: false,
             itemSelectText: '',
-        });</script>
+        });
+
+    //$("a").longclick(500, function (e) {
+    //    alert();
+    //});
+
+    $("a").mouseup(function (e) {
+        clearTimeout(pressTimer);
+        // Clear timeout
+        return false;
+    }).mousedown(function (e) {
+        // Set timeout
+        pressTimer = window.setTimeout(function () {
+            if ($(e.currentTarget).attr("data-type")=="ebook") {
+                $.post("@Url.Action("SendToKindle","Home")",
+                    { "hash": $(e.currentTarget).attr("hash") },
+                    function (data, status) { 
+                        if (data == true) {
+                            alert("Gönderim Başarılı");
+                        } else {
+                            alert("Gönderim Başarısız");
+                        }
+                        
+                    });
+            }
+
+        }, 3000);
+        return false;
+    });
+
+</script>
 
