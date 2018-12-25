@@ -38,7 +38,7 @@ namespace Indexer.Controllers
             string fileName = Path.GetFileName(file.Path);
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
-         
+
         public FileStreamResult GetAllAsZip(string filename)
         {
             List<FileItem> list = LuceneSearcher(filename);
