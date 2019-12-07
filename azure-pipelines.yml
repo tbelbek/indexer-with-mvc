@@ -21,6 +21,13 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'Sonarqube'
+    scannerMode: 'MSBuild'
+    projectKey: 'indexer'
+    projectName: 'indexer'
+
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -28,10 +35,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+- task: SonarQubeAnalyze@4
     
 - task: PublishBuildArtifacts@1
   inputs:
