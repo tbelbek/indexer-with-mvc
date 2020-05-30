@@ -5,6 +5,7 @@ using SendIndexerToKindle.Helper;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -27,8 +28,12 @@ namespace Indexer.Controllers
         [HttpPost]
         public ActionResult ListFiles(string filename)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<FileItem> list = LuceneSearcher(filename);
             ViewBag.Value = filename;
+            stopwatch.Stop();
+            ViewBag.SearchTime =stopwatch.ElapsedMilliseconds.ToString();
             return View("Index", new KeyValuePair<string, List<FileItem>>(filename, list));
         }
 

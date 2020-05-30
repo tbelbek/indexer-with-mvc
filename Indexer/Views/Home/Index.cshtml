@@ -33,6 +33,8 @@
                         <a class="btn btn-primary btn-lg active" style="margin-top: 5px;" href="@Url.Action("GetFile", "Home", new {hash = item.Hash})" role="button">@item.Name</a>
                     }
                 }
+                    <a class="btn btn-danger btn-lg active" style="margin-top: 5px;" href="#" role="button">@ViewBag.SearchTime.ToString()ms</a>
+
             </div>
         }
     }
