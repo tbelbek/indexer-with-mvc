@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -33,7 +34,7 @@ namespace Indexer.Controllers
             List<FileItem> list = LuceneSearcher(filename);
             ViewBag.Value = filename;
             stopwatch.Stop();
-            ViewBag.SearchTime =stopwatch.ElapsedMilliseconds.ToString();
+            ViewBag.SearchTime = stopwatch.ElapsedMilliseconds.ToString();
             return View("Index", new KeyValuePair<string, List<FileItem>>(filename, list));
         }
 
@@ -47,7 +48,14 @@ namespace Indexer.Controllers
         {
             var list = LuceneEngine.Search("Name", $"{filename.Trim()}*");
             list.AddRange(LuceneEngine.Search("Name", $"{filename.Trim()}"));
-            list = list.GroupBy(t => t.Hash).Select(x => x.First()).ToList();
+
+            for (int i = 0; i < filename.Length; i++)
+            {
+                StringBuilder sb = new StringBuilder(filename) {[i] = '?'};
+                list.AddRange(LuceneEngine.Search("Name", $"{sb}"));
+            }
+
+            list = list.GroupBy(t => t.Hash).Select(x => x.First()).OrderBy(t => t.Name).ToList();
             return list;
         }
 

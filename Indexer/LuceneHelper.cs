@@ -35,6 +35,7 @@ namespace Indexer
         static LuceneEngine()
         {
             _Analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
+
             _Directory = FSDirectory.Open(_IndexPath);
             fileList = new ConcurrentBag<FileItem>();
         }
@@ -67,7 +68,9 @@ namespace Indexer
             // Üzerinde arama yapmak istediğimiz field için bir query oluşturuyoruz.
             _QueryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, field, _Analyzer)
             {
-                DefaultOperator = QueryParser.AND_OPERATOR, PhraseSlop = 2
+                DefaultOperator = QueryParser.AND_OPERATOR,
+                PhraseSlop = 2,
+                AllowLeadingWildcard = true
             };
             _Query = _QueryParser.Parse(keyword);
 
@@ -131,7 +134,7 @@ namespace Indexer
             var files = System.IO.Directory.GetFiles(d);
             foreach (string f in files)
             {
-                fileList.Add(new FileItem() {Path = f, Name = Path.GetFileName(f)});
+                fileList.Add(new FileItem() { Path = f, Name = Path.GetFileName(f) });
             }
         }
 
