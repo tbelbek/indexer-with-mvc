@@ -74,7 +74,7 @@ namespace Indexer.Controllers
                 smtphelper.SendMail(file.Name, file.Name, "destructer9@kindle.com", mobiPath);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -92,8 +92,8 @@ namespace Indexer.Controllers
                 Directory.CreateDirectory($"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/");
             }
 
-            fileItem.Name = $"{DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip";
-            fileItem.Path = $"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/{DateTime.Now.ToString("ddMMyyyhhmmss")}-{filename}.zip";
+            fileItem.Name = $"{DateTime.Now:ddMMyyyhhmmss}-{filename}.zip";
+            fileItem.Path = $"{ConfigurationManager.AppSettings["IndexPath"].Split(',')[0]}temp/{DateTime.Now:ddMMyyyhhmmss}-{filename}.zip";
 
             using (ZipFile zip = new ZipFile())
             {

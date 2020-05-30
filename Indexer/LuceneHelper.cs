@@ -55,11 +55,6 @@ namespace Indexer
 
                     _IndexWriter.AddDocument(doc);
 
-                    //if (i % 100000 == 0)
-                    //{
-
-                    //}
-
                     i++;
                 }
                 _IndexWriter.Commit();
@@ -70,9 +65,10 @@ namespace Indexer
         public static List<FileItem> Search(string field, string keyword)
         {
             // Üzerinde arama yapmak istediğimiz field için bir query oluşturuyoruz.
-            _QueryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, field, _Analyzer);
-            _QueryParser.DefaultOperator = QueryParser.Operator.AND;
-            _QueryParser.PhraseSlop = 0;
+            _QueryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, field, _Analyzer)
+            {
+                DefaultOperator = QueryParser.AND_OPERATOR, PhraseSlop = 2
+            };
             _Query = _QueryParser.Parse(keyword);
 
             using (_IndexSearcher = new IndexSearcher(_Directory, true))
@@ -108,25 +104,34 @@ namespace Indexer
         {
             try
             {
+                GetFilesInDir(sDir);
+
                 var dirs = System.IO.Directory.GetDirectories(sDir);
 
                 Parallel.ForEach(dirs, (d) =>
-                                {
-                                    DirectoryInfo info = new DirectoryInfo(d);
-                                    if ((info.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden && info.Attributes != FileAttributes.System && CheckWritePermissionOnDir(d))
-                                    {
-                                        var files = System.IO.Directory.GetFiles(d);
-                                        foreach (string f in files)
-                                        {
-                                            fileList.Add(new FileItem() { Path = f, Name = Path.GetFileName(f) });
-                                        }
-                                        DirSearch(d);
-                                    }
-                                });
+                {
+                    DirectoryInfo info = new DirectoryInfo(d);
+                    if ((info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden ||
+                        info.Attributes == FileAttributes.System || !CheckWritePermissionOnDir(d))
+                        return;
+
+                    GetFilesInDir(d);
+
+                    DirSearch(d);
+                });
             }
             catch (System.Exception excpt)
             {
                 Console.WriteLine(excpt.Message);
+            }
+        }
+
+        private static void GetFilesInDir(string d)
+        {
+            var files = System.IO.Directory.GetFiles(d);
+            foreach (string f in files)
+            {
+                fileList.Add(new FileItem() {Path = f, Name = Path.GetFileName(f)});
             }
         }
 
@@ -143,7 +148,7 @@ namespace Indexer
             }
         }
 
-        public static void Indexer()
+        public static async Task IndexerAsync()
         {
             var paths = ConfigurationSettings.AppSettings["IndexPath"].Split(',').ToList();
             foreach (var item in paths)
@@ -167,10 +172,9 @@ namespace Indexer
 
         public static void ClearBag<T>(ConcurrentBag<T> bag)
         {
-            T someItem;
             while (!bag.IsEmpty)
             {
-                bag.TryTake(out someItem);
+                bag.TryTake(out _);
             }
         }
 
@@ -184,9 +188,9 @@ namespace Indexer
 
                 // Convert the byte array to hexadecimal string
                 StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
+                foreach (var t in hashBytes)
                 {
-                    sb.Append(hashBytes[i].ToString("X2"));
+                    sb.Append(t.ToString("X2"));
                 }
                 return sb.ToString();
             }

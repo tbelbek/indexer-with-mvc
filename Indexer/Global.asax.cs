@@ -20,7 +20,7 @@ namespace Indexer
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             
             GlobalConfiguration.Configuration.UseMemoryStorage();
-            RecurringJob.AddOrUpdate(() => LuceneEngine.Indexer(), Cron.Hourly);
+            RecurringJob.AddOrUpdate(() => LuceneEngine.IndexerAsync(), Cron.Hourly);
             //RecurringJob.AddOrUpdate(() => LuceneEngine.DeleteOldFiles(), Cron.Weekly);
         }
     }
