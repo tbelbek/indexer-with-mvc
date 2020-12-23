@@ -76,7 +76,6 @@ namespace Indexer
 
             using (_IndexSearcher = new IndexSearcher(_Directory, true))
             {
-                List<FileItem> products = new List<FileItem>();
                 var result = _IndexSearcher.Search(_Query, 100).ScoreDocs.AsEnumerable();
 
                 return _mapLuceneToDataList(result, _IndexSearcher).ToList();
@@ -93,10 +92,6 @@ namespace Indexer
             };
         }
 
-        private static IEnumerable<FileItem> _mapLuceneToDataList(IEnumerable<Document> hits)
-        {
-            return hits.Select(_mapLuceneDocumentToData).ToList();
-        }
         private static IEnumerable<FileItem> _mapLuceneToDataList(IEnumerable<ScoreDoc> hits,
             IndexSearcher searcher)
         {
@@ -153,7 +148,7 @@ namespace Indexer
 
         public static async Task IndexerAsync()
         {
-            var paths = ConfigurationSettings.AppSettings["IndexPath"].Split(',').ToList();
+            var paths = System.Configuration.ConfigurationManager.AppSettings["IndexPath"].Split(',').ToList();
             foreach (var item in paths)
             {
                 DirSearch(item);

@@ -11,8 +11,7 @@ namespace SendIndexerToKindle.Helper
         private string SenderPass { get; set; }
         private SmtpClient Client { get; set; }
         private bool IsSending { get; set; }
-        //public EmailDeliverySoapClient MailClient { get; set; }
-        //public string MailAccessToken { get; set; }
+
 
         public SmtpService()
         {
@@ -26,15 +25,9 @@ namespace SendIndexerToKindle.Helper
             };
             SenderMail = "tughanbelbek@gmail.com";
             SenderPass = "pzxbwcjbyjruppjm";
-            //this.MailAccessToken = ConfigurationManager.AppSettings["MailAccessToken"];
             Client.Credentials = new NetworkCredential(SenderMail, SenderPass);
-            //MailClient = new MailDeliveryService.EmailDeliverySoapClient();
         }
 
-        //public bool SendMail()
-        //{
-        //    //return SendMail("test", "test", "tughan.belbek@antasya.com");
-        //}
 
         public bool SendMail(string header, string body, string contactToSend, string attachmentPath)
         {
@@ -47,7 +40,6 @@ namespace SendIndexerToKindle.Helper
             }
             catch (Exception ex)
             {
-                //FileLogging.FileWriter(ex.Message);
             }
             return result;
         }
@@ -63,7 +55,6 @@ namespace SendIndexerToKindle.Helper
             }
             catch (Exception ex)
             {
-                //FileLogging.FileWriter(ex.Message);
             }
             return result;
         }
@@ -77,7 +68,6 @@ namespace SendIndexerToKindle.Helper
             mail.IsBodyHtml = true;
             Client.Send(mail);
 
-            //MailClient.DeliveryBulkEmailNewList_WithArray();
             result = true;
             return result;
         }
@@ -92,7 +82,6 @@ namespace SendIndexerToKindle.Helper
             mail.Attachments.Add(new Attachment(attachmentPath));
             Client.Send(mail);
 
-            //MailClient.DeliveryBulkEmailNewList_WithArray();
             result = true;
             return result;
         }

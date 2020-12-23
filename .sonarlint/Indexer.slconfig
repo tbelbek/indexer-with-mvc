@@ -1,0 +1,12 @@
+{
+  "ServerUri": "http://sonarqube.tbelbek.com/",
+  "Organization": null,
+  "ProjectKey": "indexer",
+  "ProjectName": "indexer",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AXGMUqFd7g9Csq_ypmdk",
+      "ProfileTimestamp": "2020-04-18T08:05:57Z"
+    }
+  }
+}
