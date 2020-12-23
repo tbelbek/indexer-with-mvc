@@ -38,8 +38,9 @@ namespace SendIndexerToKindle.Helper
                 result = MailJob(header, body, contactToSend, attachmentPath);
                 IsSending = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                return false;
             }
             return result;
         }
@@ -53,8 +54,9 @@ namespace SendIndexerToKindle.Helper
                 contactsToSend.ForEach(x => { result = MailJob(header, body, x); });
                 IsSending = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                return false;
             }
             return result;
         }
